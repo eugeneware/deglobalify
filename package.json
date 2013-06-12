@@ -1,6 +1,6 @@
 {
   "name": "deglobalify",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Stop imported 3rd party client-side javascript modules from writing to the global window object, and to return a module.exports object instead.",
   "main": "index.js",
   "scripts": {
@@ -25,6 +25,7 @@
   },
   "dependencies": {
     "through": "~2.3.4",
-    "falafel": "~0.2.1"
+    "falafel": "~0.2.1",
+    "escodegen": "0.0.22"
   }
 }

@@ -1,6 +1,7 @@
 var path = require('path');
 var through = require('through');
 var falafel = require('falafel');
+var unparse = require('escodegen').generate;
 
 var globals = {};
 module.exports = function (file) {
@@ -29,46 +30,62 @@ module.exports = function (file) {
   }
 
   function parse () {
+    var fixFile = (file in globals && globals[file].length);
+    var members = fixFile ? globals[file] : [];
+    var memberName;
+
     var output = falafel(data, function (node) {
-      if (node.type === 'CallExpression' && node.callee.type === 'Identifier' && node.callee.name === 'require') {
-        var els = []
+      if (fixFile) {
+        if (isMemberExpression(node) &&
+            ((node.property.type === 'Identifier' &&
+             ~members.indexOf(memberName = node.property.name)) ||
+             (node.property.type === 'Literal' &&
+              ~members.indexOf(memberName = node.property.value)))) {
+          node.object.name = 'exports';
+          node.update(unparse(node));
+        }
+      }
+
+      // is this an extended require('module', ['global1', 'global2'])
+      if (isRequire(node) && isExtendedRequire(node)) {
+        var els = node.arguments[1]
           , moduleName = node.arguments[0].value;
 
-        // additional require arg
-        if (node.arguments.length === 2 &&
-            (els = node.arguments[1]) &&
-            els.type &&
-            els.type === 'ArrayExpression') {
-
-          // remove extra require arg
-          node.update('require(' + JSON.stringify(moduleName) + ')');
-          var entries = els.elements
-            .filter(function (el) {
-              return el.type === 'Literal' && el.value;
-            })
-            .map(function (el) {
-              return el.value;
-            });
-
-          if (entries.length) {
-            globals[path.resolve(path.dirname(file), moduleName)] = entries;
-          }
+        // remove extra require arg
+        node.arguments = node.arguments.slice(0, 1);
+        node.update(unparse(node));
+        var entries = els.elements
+          .filter(function (el) { return el.type === 'Literal' && el.value; })
+          .map(function (el) { return el.value; });
+        if (entries.length) {
+          // save global mapping for later
+          globals[path.resolve(path.dirname(file), moduleName)] = entries;
         }
       }
     });
 
-    if (file in globals && globals[file].length) {
-      var _exports = '{ ';
-
-      globals[file].forEach(function (g, i) {
-        if (i > 0) _exports += ', ';
-        _exports += JSON.stringify(g) + ': window[' + JSON.stringify(g) + ']';
-        _exports[g] = g;
-      });
-
-      _exports += ' }';
-      output += '\n' + 'module.exports = ' + _exports;
-    }
     return output;
+  }
+
+  function isMemberExpression(node) {
+    return node.type === 'MemberExpression' &&
+           node.object &&
+           node.object.type === 'Identifier' &&
+           node.object.name === 'window' &&
+           node.property;
+  }
+
+  function isRequire(node) {
+    return node.type === 'CallExpression' &&
+           node.callee.type === 'Identifier' &&
+           node.callee.name === 'require';
+  }
+
+  function isExtendedRequire(node) {
+    var els;
+    return node.arguments.length === 2 &&
+           (els = node.arguments[1]) &&
+           els.type &&
+           els.type === 'ArrayExpression';
   }
 };
