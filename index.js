@@ -59,7 +59,9 @@ module.exports = function (file) {
           .map(function (el) { return el.value; });
         if (entries.length) {
           // save global mapping for later
-          globals[path.resolve(path.dirname(file), moduleName)] = entries;
+          var fileName = path.resolve(path.dirname(file), moduleName);
+          if (!fileName.match(/\.js$/)) fileName += '.js';
+          globals[fileName] = entries;
         }
       }
     });
