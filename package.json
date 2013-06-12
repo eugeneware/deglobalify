@@ -1,0 +1,30 @@
+{
+  "name": "deglobalify",
+  "version": "0.0.0",
+  "description": "Stop imported 3rd party client-side javascript modules from writing to the global window object, and to return a module.exports object instead.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/eugeneware/deglobalify"
+  },
+  "keywords": [
+    "browserify",
+    "global",
+    "globals",
+    "transform",
+    "window"
+  ],
+  "author": "Eugene Ware <eugene@noblesamurai.com>",
+  "license": "BSD",
+  "devDependencies": {
+    "domready": "~0.2.11",
+    "debowerify": "0.0.7"
+  },
+  "dependencies": {
+    "through": "~2.3.4",
+    "falafel": "~0.2.1"
+  }
+}
