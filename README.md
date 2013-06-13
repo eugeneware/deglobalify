@@ -48,7 +48,7 @@ Once you know what global ```window``` properties the bad module is clobbering,
 you can pass it into the ```require``` function as a list of of properties like
 so:
 
-```
+``` js
 // /public/scripts/app.js
 var domready = require('domready') // regular npm module
   , badmodule = require('./vendor/badmodule.js', ['myfunc']); // returns an exports object
