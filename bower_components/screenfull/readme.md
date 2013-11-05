@@ -5,15 +5,27 @@ Simple wrapper for cross-browser usage of the JavaScript [Fullscreen API](https:
 
 ### [Demo](http://sindresorhus.com/screenfull.js)
 
+### [Check out my other projects](https://github.com/sindresorhus?tab=repositories)
 
-## Download
+
+## Install
 
 Only 0.7 KB gzipped (1.6 KB minified)
+
+#### Manually
 
 Download the [production version][min] or the [development version][max].
 
 [min]: https://github.com/sindresorhus/screenfull.js/raw/gh-pages/dist/screenfull.min.js
 [max]: https://github.com/sindresorhus/screenfull.js/raw/gh-pages/dist/screenfull.js
+
+#### [Bower](http://bower.io)
+
+`bower install --save screenfull`
+
+#### [npm](https://npmjs.org/package/screenfull)
+
+`npm install --save screenfull`
 
 
 ## Why?
@@ -65,7 +77,7 @@ Safari 5.1 doesn't support use of the keyboard in fullscreen.
 #### Fullscreen the page
 
 ```javascript
-document.getElementById('button').addEventListener('click', function() {
+document.getElementById('button').addEventListener('click', function () {
 	if (screenfull.enabled) {
 		screenfull.request();
 	} else {
@@ -79,7 +91,7 @@ document.getElementById('button').addEventListener('click', function() {
 
 ```javascript
 var elem = document.getElementById('target');
-document.getElementById('button').addEventListener('click', function() {
+document.getElementById('button').addEventListener('click', function () {
 	if (screenfull.enabled) {
 		screenfull.request(elem);
 	}
@@ -91,7 +103,7 @@ document.getElementById('button').addEventListener('click', function() {
 
 ```javascript
 var target = $('#target')[0]; // Get DOM element from jQuery collection
-$('#button').click(function() {
+$('#button').click(function () {
 	if (screenfull.enabled) {
 		screenfull.request(target);
 	}
@@ -102,7 +114,7 @@ $('#button').click(function() {
 #### Toggle fullscreen on a image with jQuery
 
 ```javascript
-$('img').click(function() {
+$('img').click(function () {
 	if (screenfull.enabled) {
 		// We can use `this` since we want the clicked element
 		screenfull.toggle(this);
@@ -115,8 +127,8 @@ $('img').click(function() {
 
 ```javascript
 if (screenfull.enabled) {
-	screenfull.onchange = function() {
-		console.log('Am I fullscreen? ' + screenfull.isFullscreen ? 'Yes' : 'No');
+	screenfull.onchange = function () {
+		console.log('Am I fullscreen? ' + (screenfull.isFullscreen ? 'Yes' : 'No'));
 	};
 }
 ```
@@ -187,14 +199,6 @@ $(document).on(screenfull.raw.fullscreenchange, function () {
 - [W3C Fullscren spec](http://dvcs.w3.org/hg/fullscreen/raw-file/tip/Overview.html)
 
 
-## Contribute
-
-In lieu of a formal styleguide, take care to maintain the existing coding style. Lint and minify your code using [grunt](https://github.com/cowboy/grunt).
-
-*Also, please don't edit files in the "dist" subdirectory as they are generated via grunt. You'll find source code in the "src" subdirectory!*
-
-
 ## License
 
-[MIT License](http://en.wikipedia.org/wiki/MIT_License)
-(c) [Sindre Sorhus](http://sindresorhus.com)
+MIT © [Sindre Sorhus](http://sindresorhus.com)
